@@ -21,10 +21,15 @@ Installation:
 
 Steps: 
         `1.Clone this repository or download zip in your system.`
+        
         `2.After cloning or downloading open this directory in your IDE (visual studio code)`
+                go to file->open folder
+        
         `3.Open terminal of your IDE`
+        
         `4.Type` 
             `-- $npm install`
+            
         `5.Then run your app using follwing command on the terminal` 
             `-- $npm start`
 
