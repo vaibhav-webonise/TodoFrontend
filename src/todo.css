@@ -1,0 +1,38 @@
+.List{
+    color:#9fa8da indigo lighten-3
+    ;
+}
+
+table{
+   border-spacing: 20px;
+   background: rgb(175, 174, 243);
+}
+
+th { 
+    text-align: center;
+    padding: 10px;
+    background: #FCE4EC;
+  }
+
+  td {
+    text-align: center;
+    background: #F00;
+  padding: 10px;
+  background: #FCE4EC;
+    
+  }
+  tr {
+    text-align: center;
+}
+
+div{
+    font-family: 'Times New Roman', Times, serif;
+    padding-top: 10px;
+    align-content: center;
+}
+
+input{
+    font-family: 'Times New Roman', Times, serif;
+    border-radius: 5px;
+    font-size: 15px;
+}
