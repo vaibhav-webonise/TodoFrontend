@@ -20,7 +20,7 @@ class Home extends React.Component {
 				data: {
 					username: this.refs.username.value,
 					password: this.refs.password.value,
-				},
+				}, 
 			}).then((response) => {
 				if (response.data) {
 					history.push('/todo');
