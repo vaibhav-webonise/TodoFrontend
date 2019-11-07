@@ -1,80 +1,68 @@
 import React from 'react';
-import axios from "axios";
+import axios from 'axios';
 import history from './history';
 import './todo.css';
 
 class Home extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            username: "",
-            password: "",
-            cred: {}
-        };
-    }
+	constructor() {
+		super();
+		this.state = {
+			cred: {},
+			errormessage: '',
+		};
+	}
 
-    setUsername = event => {
-        let value = event.target.value;
-        this.setState({
-            username: value
-        });
-    };
+	logIn = () => {
+		if (!(this.refs.username.value === '' || this.refs.password.value === '')) {
+			axios({
+				method: 'post',
+				url: `http://localhost:8080/logIn`,
+				data: {
+					username: this.refs.username.value,
+					password: this.refs.password.value,
+				},
+			}).then((response) => {
+				if (response.data) {
+					history.push('/todo');
+					window.location.reload();
+				}
+			}).catch((error) => {
+				this.setState({
+					errormessage: error.response.data,
+				})
+			})
+		}
+		else {
+			this.setState({
+				errormessage: 'Fields can not be empty',
+			})
+		}
+	}
 
-    setPassword = event => {
-        let value = event.target.value;
-        this.setState({
-            password: value
-        });
-    };
+	signUp = () => {
+		history.push('/Signup');
+		window.location.reload();
+	}
 
-    logIn = () => {
-        if (this.state.username === '' || this.state.password === '') {
-            alert('Fields can not be empty');
-        }
-        else {
-            axios({
-                method: "get",
-                url: `http://localhost:8080/getUser/${this.state.username}`
-            }).then((response) => {
-                this.setState({
-                    cred: response.data
-                })
-                if (this.state.cred.password === this.state.password) {
-                    history.push('/todo');
-                    window.location.reload();
-                }
-                else {
-                    alert('invalid password');
-                }
-            }).catch(() => {
-                alert("User not exists, you need to sign up");
-            })
-        }
-    }
-
-    signUp = () => {
-        history.push('/Signup');
-        window.location.reload();
-    }
-
-    render() {
-        return (
-            <div>
-                <h3>Log In</h3>
-                <table>
-                    <tr>
-                        <td><label for="Username">Username</label></td>
-                        <td><input type="text" name="username" value={this.state.username} onChange={this.setUsername} /></td>
-                    </tr>
-                    <tr>
-                        <td><label for="Password">Password</label></td>
-                        <td><input type="password" name="password" value={this.state.password} onChange={this.setPassword} /></td>
-                    </tr>
-                </table><br />
-                <input onClick={this.logIn} type="button" value="login" />
-                <input onClick={this.signUp} type="button" value="Signup" />
-            </div>
-        )
-    }
+	render() {
+		return (
+			<div>
+				<h3>Log In</h3>
+				<table>
+					<tr>
+						<td><label for='Username'>Username</label></td>
+						<td><input type='text' name='username' ref='username' placeholder='Username' /></td>
+					</tr>
+					<tr>
+						<td><label for='Password'>Password</label></td>
+						<td><input type='password' name='password' ref='password' placeholder='Password' /></td>
+					</tr>
+				</table><br />
+				<input onClick={this.logIn} type='button' value='login' />
+				<input onClick={this.signUp} type='button' value='Signup' />
+				<h4>{this.state.errormessage}</h4><br />
+			</div>
+		)
+	}
 }
 export default Home

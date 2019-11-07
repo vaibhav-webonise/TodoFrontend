@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+
 export const ListTodo = props => {
   return (
     <div>
@@ -16,8 +17,8 @@ export const ListTodo = props => {
               <td>{todo.id}</td>
               <td>{todo.desc}</td>
               <td>
-                <button onClick={props.onEdit.bind(null, todo.id)}>Edit</button>
-                <button onClick={props.onDelete.bind(null, todo.id)}>Delete</button>
+                <button onClick={() => props.onEdit(todo.id)}>Edit</button>
+                <button onClick={() => props.onDelete(todo.id)}>Delete</button>
               </td>
             </tr>
           ))}
