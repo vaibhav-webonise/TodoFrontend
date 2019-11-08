@@ -13,13 +13,9 @@ class Signup extends React.Component {
 
 	}
 
-	signUp = () => {
-		if (this.refs.username.value === '' || this.refs.password.value === '' || this.refs.confirmPassword.value === '') {
-			this.setState({
-				errorMessage: 'Fields can not be empty'
-			})
-		}
-		else if (this.refs.password.value.length > 5) {
+	signUp = (event) => {
+		event.preventDefault();
+		if (this.refs.password.value.length > 5) {
 			if (this.refs.password.value === this.refs.confirmPassword.value) {
 				axios({
 					method: 'post',
@@ -63,22 +59,24 @@ class Signup extends React.Component {
 		return (
 			<div>
 				<h3>Sign up</h3>
-				<table>
-					<tr>
-						<td><label for='Username'>Username</label></td>
-						<td><input type='text' ref='username' placeholder='Username' /></td>
-					</tr>
-					<tr>
-						<td><label for='Password'>Password</label></td>
-						<td><input type='password' ref='password' placeholder='Password' /></td>
-					</tr>
-					<tr>
-						<td><label for='Re-enter password'>Re-enter password</label></td>
-						<td><input type='password' ref='confirmPassword' placeholder='Re-enter password' /></td>
-					</tr>
-				</table><br />
-				<input onClick={this.signUp} type='button' value='Signup' />
-				<input onClick={this.logIn} type='button' value='LogIn' />
+				<form onSubmit={this.signUp}>
+					<table>
+						<tr>
+							<td><label for='Username'>Username</label></td>
+							<td><input type='text' ref='username' placeholder='Username' required /></td>
+						</tr>
+						<tr>
+							<td><label for='Password'>Password</label></td>
+							<td><input type='password' ref='password' placeholder='Password' required /></td>
+						</tr>
+						<tr>
+							<td><label for='Re-enter password'>Re-enter password</label></td>
+							<td><input type='password' ref='confirmPassword' placeholder='Re-enter password' required /></td>
+						</tr>
+					</table><br />
+					<input type='submit' value='Signup' />
+					<input onClick={this.logIn} type='button' value='LogIn' />
+				</form>
 				<h4>{this.state.errorMessage}</h4>
 			</div>
 		)

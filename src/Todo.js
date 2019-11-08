@@ -36,32 +36,28 @@ export class Todo extends React.Component {
 		});
 	};
 
-	onAddTodo = () => {
-		if (this.state.desc === '') {
-			alert('Fields can not be empty..');
+	onAddTodo = (event) => {
+		event.preventDefault();
+		if (this.state.updateFlag) {
+			this.editTodo();
 		}
 		else {
-			if (this.state.updateFlag) {
-				this.editTodo();
-			}
-			else {
-				let desc = this.state.desc;
-				axios({
-					method: 'post',
-					url: todosUrl,
-					data: {
-						desc: desc,
-					}
-				}).then((response) => {
-					let todos = [...this.state.todos, response.data];
-					this.setState({
-						desc: '',
-						todos,
-					});
-				}).catch((error) => {
-					alert(error);
-				})
-			}
+			let desc = this.state.desc;
+			axios({
+				method: 'post',
+				url: todosUrl,
+				data: {
+					desc: desc,
+				}
+			}).then((response) => {
+				let todos = [...this.state.todos, response.data];
+				this.setState({
+					desc: '',
+					todos,
+				});
+			}).catch((error) => {
+				alert(error);
+			})
 		}
 	}
 
