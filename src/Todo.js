@@ -1,6 +1,7 @@
 import React from 'react';
 import { AddTodo } from './AddTodo';
 import { ListTodo } from './ListTodo';
+import { todosUrl } from './Urls'
 import axios from 'axios';
 import './todo.css';
 export class Todo extends React.Component {
@@ -19,7 +20,7 @@ export class Todo extends React.Component {
 	componentDidMount() {
 		axios({
 			method: 'get',
-			url: 'http://localhost:8080/todos'
+			url: todosUrl
 		}).then((response) => {
 			this.setState({
 				todos: response.data,
@@ -47,7 +48,7 @@ export class Todo extends React.Component {
 				let desc = this.state.desc;
 				axios({
 					method: 'post',
-					url: 'http://localhost:8080/todos',
+					url: todosUrl,
 					data: {
 						desc: desc,
 					}
@@ -67,7 +68,7 @@ export class Todo extends React.Component {
 	editTodo() {
 		axios({
 			method: 'put',
-			url: 'http://localhost:8080/todos',
+			url: todosUrl,
 			data: {
 				id: this.state.editId,
 				desc: this.state.desc,
@@ -89,7 +90,7 @@ export class Todo extends React.Component {
 	onDelete = (paramId) => {
 		axios({
 			method: 'delete',
-			url: `http://localhost:8080/todos/${paramId}`
+			url: `${todosUrl}/${paramId}`
 		}).then((response) => {
 			if (response) {
 				let todos = this.state.todos.filter((todo) => todo.id !== paramId);

@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import './todo.css';
+import { logInUrl } from './Urls'
 
 class Home extends React.Component {
 	constructor() {
@@ -15,7 +16,7 @@ class Home extends React.Component {
 		if (!(this.refs.username.value === '' || this.refs.password.value === '')) {
 			axios({
 				method: 'post',
-				url: `http://localhost:8080/logIn`,
+				url: logInUrl,
 				data: {
 					username: this.refs.username.value.trim(),
 					password: this.refs.password.value.trim(),

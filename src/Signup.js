@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import './todo.css';
+import { signInUrl } from './Urls'
 
 class Signup extends React.Component {
 	constructor() {
@@ -9,6 +10,7 @@ class Signup extends React.Component {
 			cred: {},
 			errorMessage: '',
 		};
+
 	}
 
 	signUp = () => {
@@ -21,7 +23,7 @@ class Signup extends React.Component {
 			if (this.refs.password.value === this.refs.confirmPassword.value) {
 				axios({
 					method: 'post',
-					url: 'http://localhost:8080/signIn',
+					url: signInUrl,
 					data: {
 						username: this.refs.username.value.trim(),
 						password: this.refs.password.value.trim(),
