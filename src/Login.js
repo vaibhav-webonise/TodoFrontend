@@ -17,8 +17,8 @@ class Home extends React.Component {
 				method: 'post',
 				url: `http://localhost:8080/logIn`,
 				data: {
-					username: this.refs.username.value,
-					password: this.refs.password.value,
+					username: this.refs.username.value.trim(),
+					password: this.refs.password.value.trim(),
 				},
 			}).then((response) => {
 				if (response.data) {
