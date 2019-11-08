@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import history from './history';
 import './todo.css';
 
 class Home extends React.Component {
@@ -23,8 +22,7 @@ class Home extends React.Component {
 				},
 			}).then((response) => {
 				if (response.data) {
-					history.push('/todo');
-					window.location.reload();
+					this.props.history.push('/todo');
 				}
 			}).catch((error) => {
 				this.setState({
@@ -40,8 +38,7 @@ class Home extends React.Component {
 	}
 
 	signUp = () => {
-		history.push('/Signup');
-		window.location.reload();
+		this.props.history.push('/Signup');
 	}
 
 	render() {

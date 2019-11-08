@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import history from './history';
 import './todo.css';
 
 class Signup extends React.Component {
@@ -55,8 +54,7 @@ class Signup extends React.Component {
 	}
 
 	logIn = () => {
-		history.push('/');
-		window.location.reload();
+		this.props.history.push('/');
 	}
 
 	render() {
