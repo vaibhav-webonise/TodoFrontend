@@ -14,7 +14,6 @@ export class Todo extends React.Component {
       updateFlag: false,
       buttonText: 'Add',
       editId: null,
-      buttonName: 'Log Out',
       flag: false,
     };
   }
@@ -22,7 +21,6 @@ export class Todo extends React.Component {
   componentDidMount() {
     if (localStorage.key('token') === null) {
       this.setState({
-        buttonName: 'Log In',
         flag: true,
       })
       return;
@@ -38,6 +36,7 @@ export class Todo extends React.Component {
           'Content-Type': 'application/json',
         },
       }).then((response) => {
+
         this.setState({
           todos: response.data,
         })
@@ -54,38 +53,32 @@ export class Todo extends React.Component {
   };
 
   onAddTodo = (event) => {
-    if (localStorage.key('token') === null) {
-      alert('you are currently logged out, please log in');
-      return;
+    event.preventDefault();
+    if (this.state.updateFlag) {
+      this.editTodo();
     }
     else {
-      event.preventDefault();
-      if (this.state.updateFlag) {
-        this.editTodo();
-      }
-      else {
-        let desc = this.state.desc;
-        axios({
-          method: 'POST',
-          url: todosUrl,
-          data: {
-            desc: desc,
-          },
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }
-        }).then((response) => {
-          let todos = [...this.state.todos, response.data];
-          this.setState({
-            desc: '',
-            todos,
-          });
-        }).catch((error) => {
-          alert(error);
-        })
-      }
+      let desc = this.state.desc;
+      axios({
+        method: 'POST',
+        url: todosUrl,
+        data: {
+          desc: desc,
+        },
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
+      }).then((response) => {
+        let todos = [...this.state.todos, response.data];
+        this.setState({
+          desc: '',
+          todos,
+        });
+      }).catch((error) => {
+        alert(error);
+      })
     }
   }
 
@@ -154,14 +147,14 @@ export class Todo extends React.Component {
 
   render() {
     if (this.state.flag) {
-      return (<h1>Page not found</h1>);
+      return (<h1>you are currently logged out <a href='/login'>click here</a> to log in</h1>);
     }
     else {
       return (
         <div>
           <h3>Your TodoList</h3><br />
           <AddTodo desc={this.state.desc} buttonText={this.state.buttonText} onUserType={this.onUserType} onAddTodo={this.onAddTodo} />
-          <ListTodo buttonName={this.state.buttonName} onLogOut={this.onLogOut} todos={this.state.todos} onEdit={this.onEdit} onDelete={this.onDelete} />
+          <ListTodo onLogOut={this.onLogOut} todos={this.state.todos} onEdit={this.onEdit} onDelete={this.onDelete} />
         </div>
       );
     }

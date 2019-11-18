@@ -25,7 +25,7 @@ export const ListTodo = props => {
         </tbody>
       </table>
       <br />
-      <input type='submit' onClick={() => props.onLogOut()} value={props.buttonName} />
+      <input type='submit' onClick={() => props.onLogOut()} value='Log Out' />
     </div>
   );
 };
