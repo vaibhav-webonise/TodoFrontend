@@ -1,8 +1,6 @@
 import React from 'react';
 
 export const ListTodo = props => {
-
- 
   return (
     <div>
       <table>
@@ -26,8 +24,8 @@ export const ListTodo = props => {
           ))}
         </tbody>
       </table>
-      <br/>
-      <input type='submit' onClick={() => props.onLogOut()} value={props.buttonName}/>
+      <br />
+      <input type='submit' onClick={() => props.onLogOut()} value={props.buttonName} />
     </div>
   );
 };

@@ -15,7 +15,7 @@ export class Todo extends React.Component {
       buttonText: 'Add',
       editId: null,
       buttonName: 'Log Out',
-      flag:false,
+      flag: false,
     };
   }
 
@@ -23,7 +23,7 @@ export class Todo extends React.Component {
     if (localStorage.key('token') === null) {
       this.setState({
         buttonName: 'Log In',
-        flag:true,
+        flag: true,
       })
       return;
     }
@@ -38,7 +38,6 @@ export class Todo extends React.Component {
           'Content-Type': 'application/json',
         },
       }).then((response) => {
-
         this.setState({
           todos: response.data,
         })
@@ -115,7 +114,6 @@ export class Todo extends React.Component {
     }).catch((error) => {
       alert(error);
     })
-
   }
 
   onDelete = (paramId) => {
@@ -137,7 +135,6 @@ export class Todo extends React.Component {
     }).catch((error) => {
       alert(error);
     })
-
   }
 
   onEdit = (paramId) => {
@@ -156,10 +153,10 @@ export class Todo extends React.Component {
   }
 
   render() {
-    if(this.state.flag){
-      return(<h1>Page not found</h1>);
+    if (this.state.flag) {
+      return (<h1>Page not found</h1>);
     }
-    else{
+    else {
       return (
         <div>
           <h3>Your TodoList</h3><br />
@@ -168,6 +165,5 @@ export class Todo extends React.Component {
         </div>
       );
     }
-    
   }
 }

@@ -9,30 +9,51 @@ class Signup extends React.Component {
     this.state = {
       cred: {},
       infoMessage: '',
+      userName: '',
+      password: '',
+      confirmPassword: '',
     };
   }
 
-  
+  onUserNameType = event => {
+    this.setState({
+      userName: event.target.value,
+    });
+  };
+
+  onPasswordType = event => {
+    this.setState({
+      password: event.target.value,
+    });
+  };
+
+  onConfirmPasswordType = event => {
+    this.setState({
+      confirmPassword: event.target.value,
+    });
+  };
 
   signUp = (event) => {
     event.preventDefault();
-    if (this.refs.password.value.length > 5) {
-      if (this.refs.password.value === this.refs.confirmPassword.value) {
+    if (this.state.password.length > 5) {
+      if (this.password === this.confirmPassword) {
         axios({
           method: 'post',
           url: signUpUrl,
           data: {
-            username: this.refs.username.value.trim(),
-            password: this.refs.password.value.trim(),
+            username: this.state.userName.trim(),
+            password: this.state.password.trim(),
           }
         }).then((response) => {
           if (response.status === 200) {
             this.setState({
               infoMessage: 'Registration successful',
             })
-            this.refs.username.value = '';
-            this.refs.password.value = '';
-            this.refs.confirmPassword.value = '';
+            this.setState({
+              confirmPassword: '',
+              password: '',
+              userName: '',
+            })
           }
         }).catch((error) => {
           if (error.message === 'Network Error') {
@@ -70,15 +91,15 @@ class Signup extends React.Component {
           <table>
             <tr>
               <td><label for='Username'>Username</label></td>
-              <td><input type='text' ref='username' onUserNameType placeholder='Username' required /></td>
+              <td><input type='text' onChange={this.onUserNameType} value={this.state.userName} onUserNameType placeholder='Username' required /></td>
             </tr>
             <tr>
               <td><label for='Password'>Password</label></td>
-              <td><input type='password' ref='password' placeholder='Password' required /></td>
+              <td><input type='password' onChange={this.onPasswordType} value={this.state.password} placeholder='Password' required /></td>
             </tr>
             <tr>
               <td><label for='Re-enter password'>Re-enter password</label></td>
-              <td><input type='password' ref='confirmPassword' placeholder='Re-enter password' required /></td>
+              <td><input type='password' onChange={this.onConfirmPasswordType} value={this.state.confirmPassword} placeholder='Re-enter password' required /></td>
             </tr>
           </table><br />
           <input type='submit' value='Signup' />

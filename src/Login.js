@@ -9,8 +9,22 @@ class Home extends React.Component {
     this.state = {
       cred: {},
       infoMessage: null,
+      userName: '',
+      password: '',
     };
   }
+
+  onUserNameType = event => {
+    this.setState({
+      userName: event.target.value,
+    });
+  };
+
+  onPasswordType = event => {
+    this.setState({
+      password: event.target.value,
+    });
+  };
 
   logIn = (event) => {
     event.preventDefault();
@@ -18,8 +32,8 @@ class Home extends React.Component {
       method: 'post',
       url: logInUrl,
       data: {
-        username: this.refs.username.value.trim(),
-        password: this.refs.password.value.trim(),
+        username: this.state.userName.trim(),
+        password: this.state.password.trim(),
       },
     }).then((response) => {
       if (response.status === 200) {
@@ -41,7 +55,6 @@ class Home extends React.Component {
           infoMessage: 'Invalid password'
         })
       }
-
     })
   }
 
@@ -57,11 +70,11 @@ class Home extends React.Component {
           <table>
             <tr>
               <td><label for='Username'>Username</label></td>
-              <td><input type='text' name='username' ref='username' placeholder='Username' required /></td>
+              <td><input type='text' name='username' onChange={this.onUserNameType} value={this.userName} placeholder='Username' required /></td>
             </tr>
             <tr>
               <td><label for='Password'>Password</label></td>
-              <td><input type='password' name='password' ref='password' placeholder='Password' required /></td>
+              <td><input type='password' name='password' onChange={this.onPasswordType} value={this.password} placeholder='Password' required /></td>
             </tr>
           </table><br />
           <input type='submit' value='login' />
