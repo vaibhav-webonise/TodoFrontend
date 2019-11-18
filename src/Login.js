@@ -8,7 +8,7 @@ class Home extends React.Component {
     super();
     this.state = {
       cred: {},
-      infoMessage: '',
+      infoMessage: null,
     };
   }
 
@@ -25,12 +25,23 @@ class Home extends React.Component {
       if (response.status === 200) {
         localStorage.setItem('token', response.data.jwt);
         console.log(localStorage.getItem('token'));
-        this.props.history.push('/todo');
+        this.props.history.push('/todos');
       }
     }).catch((error) => {
-      this.setState({
-        infoMessage: error.response.data,
-      })
+      if (error.message === 'Network Error') {
+        this.setState({
+          infoMessage: error.message
+        })
+      } else if (error.response.status === 404) {
+        this.setState({
+          infoMessage: 'user not exists, You need to sign up'
+        })
+      } else if (error.response.status === 412) {
+        this.setState({
+          infoMessage: 'Invalid password'
+        })
+      }
+
     })
   }
 

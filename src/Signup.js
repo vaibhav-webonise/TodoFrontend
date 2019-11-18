@@ -12,6 +12,8 @@ class Signup extends React.Component {
     };
   }
 
+  
+
   signUp = (event) => {
     event.preventDefault();
     if (this.refs.password.value.length > 5) {
@@ -33,9 +35,15 @@ class Signup extends React.Component {
             this.refs.confirmPassword.value = '';
           }
         }).catch((error) => {
-          this.setState({
-            infoMessage: error.response.data
-          })
+          if (error.message === 'Network Error') {
+            this.setState({
+              infoMessage: error.message
+            })
+          } else if (error.response.status === 409) {
+            this.setState({
+              infoMessage: 'user already exists'
+            })
+          }
         })
       }
       else {
@@ -51,7 +59,7 @@ class Signup extends React.Component {
   }
 
   logIn = () => {
-    this.props.history.push('/');
+    this.props.history.push('/login');
   }
 
   render() {
@@ -62,7 +70,7 @@ class Signup extends React.Component {
           <table>
             <tr>
               <td><label for='Username'>Username</label></td>
-              <td><input type='text' ref='username' placeholder='Username' required /></td>
+              <td><input type='text' ref='username' onUserNameType placeholder='Username' required /></td>
             </tr>
             <tr>
               <td><label for='Password'>Password</label></td>

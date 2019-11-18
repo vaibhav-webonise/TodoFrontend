@@ -14,27 +14,38 @@ export class Todo extends React.Component {
       updateFlag: false,
       buttonText: 'Add',
       editId: null,
+      buttonName: 'Log Out',
+      flag:false,
     };
   }
 
   componentDidMount() {
-    axios({
-      method: 'GET',
-      url: todosUrl,
-      headers:
-      {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
-
+    if (localStorage.key('token') === null) {
       this.setState({
-        todos: response.data,
+        buttonName: 'Log In',
+        flag:true,
       })
-    }).catch((error) => {
-      console.error(error);
-    })
+      return;
+    }
+    else {
+      axios({
+        method: 'GET',
+        url: todosUrl,
+        headers:
+        {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      }).then((response) => {
+
+        this.setState({
+          todos: response.data,
+        })
+      }).catch((error) => {
+        console.error(error);
+      })
+    }
   }
 
   onUserType = event => {
@@ -44,32 +55,38 @@ export class Todo extends React.Component {
   };
 
   onAddTodo = (event) => {
-    event.preventDefault();
-    if (this.state.updateFlag) {
-      this.editTodo();
+    if (localStorage.key('token') === null) {
+      alert('you are currently logged out, please log in');
+      return;
     }
     else {
-      let desc = this.state.desc;
-      axios({
-        method: 'POST',
-        url: todosUrl,
-        data: {
-          desc: desc,
-        },
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
-      }).then((response) => {
-        let todos = [...this.state.todos, response.data];
-        this.setState({
-          desc: '',
-          todos,
-        });
-      }).catch((error) => {
-        alert(error);
-      })
+      event.preventDefault();
+      if (this.state.updateFlag) {
+        this.editTodo();
+      }
+      else {
+        let desc = this.state.desc;
+        axios({
+          method: 'POST',
+          url: todosUrl,
+          data: {
+            desc: desc,
+          },
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }
+        }).then((response) => {
+          let todos = [...this.state.todos, response.data];
+          this.setState({
+            desc: '',
+            todos,
+          });
+        }).catch((error) => {
+          alert(error);
+        })
+      }
     }
   }
 
@@ -98,6 +115,7 @@ export class Todo extends React.Component {
     }).catch((error) => {
       alert(error);
     })
+
   }
 
   onDelete = (paramId) => {
@@ -119,6 +137,7 @@ export class Todo extends React.Component {
     }).catch((error) => {
       alert(error);
     })
+
   }
 
   onEdit = (paramId) => {
@@ -131,13 +150,24 @@ export class Todo extends React.Component {
     });
   }
 
+  onLogOut = () => {
+    localStorage.removeItem('token');
+    this.props.history.push('/login');
+  }
+
   render() {
-    return (
-      <div>
-        <h3>Your TodoList</h3><br />
-        <AddTodo desc={this.state.desc} buttonText={this.state.buttonText} onUserType={this.onUserType} onAddTodo={this.onAddTodo} />
-        <ListTodo todos={this.state.todos} onEdit={this.onEdit} onDelete={this.onDelete} />
-      </div>
-    );
+    if(this.state.flag){
+      return(<h1>Page not found</h1>);
+    }
+    else{
+      return (
+        <div>
+          <h3>Your TodoList</h3><br />
+          <AddTodo desc={this.state.desc} buttonText={this.state.buttonText} onUserType={this.onUserType} onAddTodo={this.onAddTodo} />
+          <ListTodo buttonName={this.state.buttonName} onLogOut={this.onLogOut} todos={this.state.todos} onEdit={this.onEdit} onDelete={this.onDelete} />
+        </div>
+      );
+    }
+    
   }
 }
