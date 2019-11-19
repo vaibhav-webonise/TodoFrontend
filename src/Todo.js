@@ -14,15 +14,11 @@ export class Todo extends React.Component {
       updateFlag: false,
       buttonText: 'Add',
       editId: null,
-      flag: false,
     };
   }
 
   componentDidMount() {
     if (localStorage.key('token') === null) {
-      this.setState({
-        flag: true,
-      })
       return;
     }
     else {
@@ -36,7 +32,6 @@ export class Todo extends React.Component {
           'Content-Type': 'application/json',
         },
       }).then((response) => {
-
         this.setState({
           todos: response.data,
         })
@@ -146,8 +141,8 @@ export class Todo extends React.Component {
   }
 
   render() {
-    if (this.state.flag) {
-      return (<h1>you are currently logged out <a href='/login'>click here</a> to log in</h1>);
+    if (localStorage.key('token') === null) {
+      return (<h3>you are currently logged out <a href='/login'>click here</a> to log in</h3>);
     }
     else {
       return (
@@ -160,3 +155,4 @@ export class Todo extends React.Component {
     }
   }
 }
+export default Todo
