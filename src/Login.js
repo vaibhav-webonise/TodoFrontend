@@ -4,8 +4,9 @@ import './todo.css';
 import { logInUrl } from './Urls'
 
 class Login extends React.Component {
-  constructor() {
-    super();
+
+  constructor(props) {
+    super(props);
     this.state = {
       infoMessage: null,
       userName: '',
@@ -13,31 +14,25 @@ class Login extends React.Component {
     };
   }
 
-  onUserNameType = event => {
+  onUserType = event => {
     this.setState({
-      userName: event.target.value,
-    });
-  };
-
-  onPasswordType = event => {
-    this.setState({
-      password: event.target.value,
+      [event.target.name]: event.target.value,
     });
   };
 
   logIn = (event) => {
+    const { userName, password } = this.state;
     event.preventDefault();
     axios({
       method: 'post',
       url: logInUrl,
       data: {
-        username: this.state.userName.trim(),
-        password: this.state.password.trim(),
+        username: userName.trim(),
+        password: password.trim(),
       },
     }).then((response) => {
       if (response.status === 200) {
         localStorage.setItem('token', response.data.jwt);
-        console.log(localStorage.getItem('token'));
         this.props.history.push('/todos');
       }
     }).catch((error) => {
@@ -62,7 +57,7 @@ class Login extends React.Component {
   }
 
   render() {
-    if (localStorage.key('token') !== null) {
+    if (localStorage.getItem('token') !== null) {
       return (<h3>Already logged in</h3>)
     }
     else {
@@ -73,11 +68,11 @@ class Login extends React.Component {
             <table>
               <tr>
                 <td><label for='Username'>Username</label></td>
-                <td><input type='text' name='username' onChange={this.onUserNameType} value={this.userName} placeholder='Username' required /></td>
+                <td><input type='text' name='userName' onChange={this.onUserType} value={this.userName} placeholder='Username' required /></td>
               </tr>
               <tr>
                 <td><label for='Password'>Password</label></td>
-                <td><input type='password' name='password' onChange={this.onPasswordType} value={this.password} placeholder='Password' required /></td>
+                <td><input type='password' name='password' onChange={this.onUserType} value={this.password} placeholder='Password' required /></td>
               </tr>
             </table><br />
             <input type='submit' value='login' />

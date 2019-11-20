@@ -18,7 +18,7 @@ export class Todo extends React.Component {
   }
 
   componentDidMount() {
-    if (localStorage.key('token') === null) {
+    if (localStorage.getItem('token') === null) {
       return;
     }
     else {
@@ -36,6 +36,9 @@ export class Todo extends React.Component {
           todos: response.data,
         })
       }).catch((error) => {
+        if (error.message === 'Network Error') {
+          this.onLogOut();
+        }
         console.error(error);
       })
     }
@@ -141,7 +144,7 @@ export class Todo extends React.Component {
   }
 
   render() {
-    if (localStorage.key('token') === null) {
+    if (localStorage.getItem('token') === null) {
       return (<h3>you are currently logged out <a href='/login'>click here</a> to log in</h3>);
     }
     else {

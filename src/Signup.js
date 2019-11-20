@@ -14,34 +14,23 @@ class Signup extends React.Component {
     };
   }
 
-  onUserNameType = event => {
+  onUserType = (event) => {
     this.setState({
-      userName: event.target.value,
+      [event.target.name]: event.target.value
     });
-  };
-
-  onPasswordType = event => {
-    this.setState({
-      password: event.target.value,
-    });
-  };
-
-  onConfirmPasswordType = event => {
-    this.setState({
-      confirmPassword: event.target.value,
-    });
-  };
+  }
 
   signUp = (event) => {
     event.preventDefault();
-    if (this.state.password.length > 5) {
-      if (this.password === this.confirmPassword) {
+    const { password, confirmPassword, userName } = this.state;
+    if (password.length > 5) {
+      if (password === confirmPassword) {
         axios({
           method: 'post',
           url: signUpUrl,
           data: {
-            username: this.state.userName.trim(),
-            password: this.state.password.trim(),
+            username: userName.trim(),
+            password: password.trim(),
           }
         }).then((response) => {
           if (response.status === 200) {
@@ -83,6 +72,7 @@ class Signup extends React.Component {
   }
 
   render() {
+    const { userName, password, confirmPassword } = this.state;
     return (
       <div>
         <h3>Sign up</h3>
@@ -90,15 +80,15 @@ class Signup extends React.Component {
           <table>
             <tr>
               <td><label for='Username'>Username</label></td>
-              <td><input type='text' onChange={this.onUserNameType} value={this.state.userName} onUserNameType placeholder='Username' required /></td>
+              <td><input type='text' name='userName' onChange={this.onUserType} value={userName} placeholder='Username' required /></td>
             </tr>
             <tr>
               <td><label for='Password'>Password</label></td>
-              <td><input type='password' onChange={this.onPasswordType} value={this.state.password} placeholder='Password' required /></td>
+              <td><input type='password' name='password' onChange={this.onUserType} value={password} placeholder='Password' required /></td>
             </tr>
             <tr>
               <td><label for='Re-enter password'>Re-enter password</label></td>
-              <td><input type='password' onChange={this.onConfirmPasswordType} value={this.state.confirmPassword} placeholder='Re-enter password' required /></td>
+              <td><input type='password' name='confirmPassword' onChange={this.onUserType} value={confirmPassword} placeholder='Re-enter password' required /></td>
             </tr>
           </table><br />
           <input type='submit' value='Signup' />

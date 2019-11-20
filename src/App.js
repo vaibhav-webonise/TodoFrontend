@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import Todo from './Todo';
-import Home from './Home';
+import { Home } from './Home';
 import login from './Login';
 import { NoMatchPage } from './NoMatchPage'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
