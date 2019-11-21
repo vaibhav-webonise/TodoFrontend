@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import './todo.css';
-import { signUpUrl } from './Urls'
+import { constants } from './AppConstants'
 
 class Signup extends React.Component {
   constructor() {
@@ -27,7 +27,7 @@ class Signup extends React.Component {
       if (password === confirmPassword) {
         axios({
           method: 'post',
-          url: signUpUrl,
+          url: `${constants.URL}/signup`,
           data: {
             username: userName.trim(),
             password: password.trim(),
@@ -44,7 +44,7 @@ class Signup extends React.Component {
             })
           }
         }).catch((error) => {
-          if (error.message === 'Network Error') {
+          if (error.message === constants.NETWORK_ERROR) {
             this.setState({
               infoMessage: error.message
             })

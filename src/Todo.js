@@ -1,8 +1,9 @@
 import React from 'react';
 import { AddTodo } from './AddTodo';
 import { ListTodo } from './ListTodo';
-import { todosUrl } from './Urls'
+import { constants } from './AppConstants'
 import axios from 'axios';
+import { Link } from 'react-router-dom'
 import './todo.css';
 export class Todo extends React.Component {
 
@@ -18,16 +19,16 @@ export class Todo extends React.Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem('token') === null) {
+    if (localStorage.getItem(constants.TOKEN) === null) {
       return;
     }
     else {
       axios({
         method: 'GET',
-        url: todosUrl,
+        url: `${constants.URL}/todos`,
         headers:
         {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem(constants.TOKEN)}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
@@ -36,10 +37,8 @@ export class Todo extends React.Component {
           todos: response.data,
         })
       }).catch((error) => {
-        if (error.message === 'Network Error') {
-          this.onLogOut();
-        }
-        console.error(error);
+        alert(error.message);
+        this.onLogOut();
       })
     }
   }
@@ -59,12 +58,12 @@ export class Todo extends React.Component {
       let desc = this.state.desc;
       axios({
         method: 'POST',
-        url: todosUrl,
+        url: `${constants.URL}/todos`,
         data: {
           desc: desc,
         },
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem(constants.TOKEN)}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         }
@@ -75,7 +74,8 @@ export class Todo extends React.Component {
           todos,
         });
       }).catch((error) => {
-        alert(error);
+        alert(error.message)
+        this.onLogOut();
       })
     }
   }
@@ -83,18 +83,18 @@ export class Todo extends React.Component {
   editTodo() {
     axios({
       method: 'PUT',
-      url: todosUrl,
+      url: `${constants.URL}/todos`,
       data: {
         id: this.state.editId,
         desc: this.state.desc,
       },
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Authorization': `Bearer ${localStorage.getItem(constants.TOKEN)}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       }
     }).then((response) => {
-      if (response) {
+      if (response.status === 200) {
         this.state.todos.find(({ id }) => id === this.state.editId).desc = this.state.desc;
         this.setState({
           desc: '',
@@ -104,15 +104,16 @@ export class Todo extends React.Component {
       }
     }).catch((error) => {
       alert(error);
+      this.onLogOut();
     })
   }
 
   onDelete = (paramId) => {
     axios({
       method: 'DELETE',
-      url: `${todosUrl}/${paramId}`,
+      url: `${constants.URL}/todos/${paramId}`,
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Authorization': `Bearer ${localStorage.getItem(constants.TOKEN)}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       }
@@ -125,6 +126,7 @@ export class Todo extends React.Component {
       }
     }).catch((error) => {
       alert(error);
+      this.onLogOut();
     })
   }
 
@@ -139,13 +141,13 @@ export class Todo extends React.Component {
   }
 
   onLogOut = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem(constants.TOKEN);
     this.props.history.push('/login');
   }
 
   render() {
-    if (localStorage.getItem('token') === null) {
-      return (<h3>you are currently logged out <a href='/login'>click here</a> to log in</h3>);
+    if (localStorage.getItem(constants.TOKEN) === null) {
+      return (<h3>you are currently logged out <Link to='/login'>click here</Link> to log in</h3>);
     }
     else {
       return (

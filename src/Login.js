@@ -1,10 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import './todo.css';
-import { logInUrl } from './Urls'
+import { constants } from './AppConstants'
 
 class Login extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -25,18 +24,18 @@ class Login extends React.Component {
     event.preventDefault();
     axios({
       method: 'post',
-      url: logInUrl,
+      url: `${constants.URL}/login`,
       data: {
         username: userName.trim(),
         password: password.trim(),
       },
     }).then((response) => {
       if (response.status === 200) {
-        localStorage.setItem('token', response.data.jwt);
+        localStorage.setItem(constants.TOKEN, response.data.jwt);
         this.props.history.push('/todos');
       }
     }).catch((error) => {
-      if (error.message === 'Network Error') {
+      if (error.message === constants.NETWORK_ERROR) {
         this.setState({
           infoMessage: error.message
         })
@@ -57,7 +56,7 @@ class Login extends React.Component {
   }
 
   render() {
-    if (localStorage.getItem('token') !== null) {
+    if (localStorage.getItem(constants.TOKEN) !== null) {
       return (<h3>Already logged in</h3>)
     }
     else {
