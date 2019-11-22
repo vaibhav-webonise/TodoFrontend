@@ -15,6 +15,7 @@ export class Todo extends React.Component {
       updateFlag: false,
       buttonText: 'Add',
       editId: null,
+      PAGE_NO: 0,
     };
   }
 
@@ -23,37 +24,39 @@ export class Todo extends React.Component {
       return;
     }
     else {
-      axios({
-        method: 'GET',
-        url: `${constants.URL}/todos`,
-        headers:
-        {
-          'Authorization': `Bearer ${localStorage.getItem(constants.TOKEN)}`,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      }).then((response) => {
-        this.setState({
-          todos: response.data,
-        })
-      }).catch((error) => {
-        if (!error.response.status === 404) {
-          alert(error.message);
-          this.onLogOut();
-        }
-      })
+      this.onGetRequest();
+      this.setState((prevState) => ({ PAGE_NO: prevState.PAGE_NO + constants.INCREMENT_COUNT, }));
     }
   }
 
+  onGetRequest = () => {
+    axios({
+      method: 'GET',
+      url: `${constants.URL}/todos/${this.state.PAGE_NO}`,
+      headers:
+      {
+        'Authorization': `Bearer ${localStorage.getItem(constants.TOKEN)}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    }).then((response) => {
+      for (let i = 0; i < response.data.length; i++) {
+        this.setState({ todos: [...this.state.todos, response.data[i]] });
+      }
+    }).catch((error) => {
+      if (!error.response.status === 404) {
+        alert(error.message);
+        this.onLogOut();
+      }
+    })
+  }
+
   onUserType = event => {
-    this.setState({
-      desc: event.target.value,
-    });
+    this.setState({ desc: event.target.value, });
   };
 
   onAddTodo = (event) => {
     event.preventDefault();
-
     if (this.state.updateFlag) {
       this.editTodo();
     }
@@ -72,10 +75,7 @@ export class Todo extends React.Component {
         }
       }).then((response) => {
         let todos = [...this.state.todos, response.data];
-        this.setState({
-          desc: '',
-          todos,
-        });
+        this.setState({ desc: '', todos, });
       }).catch((error) => {
         alert(error.message)
         this.onLogOut();
@@ -123,9 +123,7 @@ export class Todo extends React.Component {
     }).then((response) => {
       if (response.status === 200) {
         let todos = this.state.todos.filter((todo) => todo.id !== paramId);
-        this.setState({
-          todos,
-        })
+        this.setState({ todos, })
       }
     }).catch((error) => {
       alert(error);
@@ -148,6 +146,11 @@ export class Todo extends React.Component {
     this.props.history.push('/login');
   }
 
+  incrementPageNo = () => {
+    this.setState((prevState) => ({ PAGE_NO: prevState.PAGE_NO + constants.INCREMENT_COUNT, }))
+    this.onGetRequest();
+  }
+
   render() {
     if (localStorage.getItem(constants.TOKEN) === null) {
       return (<h3>you are currently logged out <Link to='/login'>click here</Link> to log in</h3>);
@@ -158,6 +161,7 @@ export class Todo extends React.Component {
           <h3>Your TodoList</h3><br />
           <AddTodo desc={this.state.desc} buttonText={this.state.buttonText} onUserType={this.onUserType} onAddTodo={this.onAddTodo} />
           <ListTodo onLogOut={this.onLogOut} todos={this.state.todos} onEdit={this.onEdit} onDelete={this.onDelete} />
+          <input onClick={this.incrementPageNo} type='button' value='see more' />
         </div>
       );
     }

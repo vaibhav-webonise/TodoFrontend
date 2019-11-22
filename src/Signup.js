@@ -34,9 +34,7 @@ class Signup extends React.Component {
           }
         }).then((response) => {
           if (response.status === 200) {
-            this.setState({
-              infoMessage: 'Registration successful',
-            })
+            this.setState({ infoMessage: 'Registration successful', })
             this.setState({
               confirmPassword: '',
               password: '',
@@ -45,25 +43,17 @@ class Signup extends React.Component {
           }
         }).catch((error) => {
           if (error.message === constants.NETWORK_ERROR) {
-            this.setState({
-              infoMessage: error.message
-            })
+            this.setState({ infoMessage: error.message })
           } else if (error.response.status === 409) {
-            this.setState({
-              infoMessage: 'user already exists'
-            })
+            this.setState({ infoMessage: 'user already exists' })
           }
         })
       }
       else {
-        this.setState({
-          infoMessage: 'Password does not match'
-        })
+        this.setState({ infoMessage: 'Password does not match' })
       }
     } else {
-      this.setState({
-        infoMessage: 'Password must have atleast 6 character'
-      })
+      this.setState({ infoMessage: 'Password must have atleast 6 character' })
     }
   }
 

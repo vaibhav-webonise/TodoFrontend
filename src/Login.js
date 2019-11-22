@@ -14,9 +14,7 @@ class Login extends React.Component {
   }
 
   onUserType = event => {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
+    this.setState({ [event.target.name]: event.target.value, });
   };
 
   logIn = (event) => {
@@ -36,17 +34,11 @@ class Login extends React.Component {
       }
     }).catch((error) => {
       if (error.message === constants.NETWORK_ERROR) {
-        this.setState({
-          infoMessage: error.message
-        })
+        this.setState({ infoMessage: error.message })
       } else if (error.response.status === 404) {
-        this.setState({
-          infoMessage: 'user not exists, You need to sign up'
-        })
+        this.setState({ infoMessage: 'user not exists, You need to sign up' })
       } else if (error.response.status === 412) {
-        this.setState({
-          infoMessage: 'Invalid password'
-        })
+        this.setState({ infoMessage: 'Invalid password' })
       }
     })
   }

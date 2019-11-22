@@ -3,4 +3,5 @@ export const constants = {
   SERVER_ERROR: 'Request failed with status code 500',
   NETWORK_ERROR: 'Network Error',
   TOKEN: 'token',
+  INCREMENT_COUNT: 1,
 } 
