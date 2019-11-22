@@ -1,6 +1,7 @@
 import React from 'react';
 
 export const ListTodo = props => {
+  let serialNo = 1;
   return (
     <div>
       <table>
@@ -14,7 +15,7 @@ export const ListTodo = props => {
         <tbody>
           {props.todos.map(todo => (
             <tr key={todo.id}>
-              <td>{todo.id}</td>
+              <td>{serialNo++}</td>
               <td>{todo.desc}</td>
               <td>
                 <button onClick={() => props.onEdit(todo.id)}>Edit</button>

@@ -37,8 +37,10 @@ export class Todo extends React.Component {
           todos: response.data,
         })
       }).catch((error) => {
-        alert(error.message);
-        this.onLogOut();
+        if (!error.response.status === 404) {
+          alert(error.message);
+          this.onLogOut();
+        }
       })
     }
   }
@@ -51,6 +53,7 @@ export class Todo extends React.Component {
 
   onAddTodo = (event) => {
     event.preventDefault();
+
     if (this.state.updateFlag) {
       this.editTodo();
     }
