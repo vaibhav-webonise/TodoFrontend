@@ -24,12 +24,12 @@ export class Todo extends React.Component {
       return;
     }
     else {
-      this.onGetRequest();
+      this.getRequest();
       this.setState((prevState) => ({ PAGE_NO: prevState.PAGE_NO + constants.INCREMENT_COUNT, }));
     }
   }
 
-  onGetRequest = () => {
+  getRequest = () => {
     axios({
       method: 'GET',
       url: `${constants.URL}/todos/${this.state.PAGE_NO}`,
@@ -44,7 +44,7 @@ export class Todo extends React.Component {
         this.setState({ todos: [...this.state.todos, response.data[i]] });
       }
     }).catch((error) => {
-      if (!error.response.status === 404) {
+      if (!error.response.status === constants.NOT_FOUND) {
         alert(error.message);
         this.onLogOut();
       }
@@ -97,7 +97,7 @@ export class Todo extends React.Component {
         'Content-Type': 'application/json',
       }
     }).then((response) => {
-      if (response.status === 200) {
+      if (response.status === constants.OK) {
         this.state.todos.find(({ id }) => id === this.state.editId).desc = this.state.desc;
         this.setState({
           desc: '',
@@ -106,7 +106,7 @@ export class Todo extends React.Component {
         })
       }
     }).catch((error) => {
-      alert(error);
+      alert(error.message);
       this.onLogOut();
     })
   }
@@ -121,12 +121,12 @@ export class Todo extends React.Component {
         'Content-Type': 'application/json',
       }
     }).then((response) => {
-      if (response.status === 200) {
+      if (response.status === constants.OK) {
         let todos = this.state.todos.filter((todo) => todo.id !== paramId);
         this.setState({ todos, })
       }
     }).catch((error) => {
-      alert(error);
+      alert(error.message);
       this.onLogOut();
     })
   }
@@ -148,7 +148,7 @@ export class Todo extends React.Component {
 
   incrementPageNo = () => {
     this.setState((prevState) => ({ PAGE_NO: prevState.PAGE_NO + constants.INCREMENT_COUNT, }))
-    this.onGetRequest();
+    this.getRequest();
   }
 
   render() {
@@ -161,7 +161,7 @@ export class Todo extends React.Component {
           <h3>Your TodoList</h3><br />
           <AddTodo desc={this.state.desc} buttonText={this.state.buttonText} onUserType={this.onUserType} onAddTodo={this.onAddTodo} />
           <ListTodo onLogOut={this.onLogOut} todos={this.state.todos} onEdit={this.onEdit} onDelete={this.onDelete} />
-          <input onClick={this.incrementPageNo} type='button' value='see more' />
+          <input onClick={this.incrementPageNo} type='button' value='>' />
         </div>
       );
     }

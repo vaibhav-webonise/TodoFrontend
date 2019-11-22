@@ -28,16 +28,16 @@ class Login extends React.Component {
         password: password.trim(),
       },
     }).then((response) => {
-      if (response.status === 200) {
+      if (response.status === constants.OK) {
         localStorage.setItem(constants.TOKEN, response.data.jwt);
         this.props.history.push('/todos');
       }
     }).catch((error) => {
       if (error.message === constants.NETWORK_ERROR) {
         this.setState({ infoMessage: error.message })
-      } else if (error.response.status === 404) {
+      } else if (error.response.status === constants.NOT_FOUND) {
         this.setState({ infoMessage: 'user not exists, You need to sign up' })
-      } else if (error.response.status === 412) {
+      } else if (error.response.status === constants.PRECONDITION_FAILED) {
         this.setState({ infoMessage: 'Invalid password' })
       }
     })

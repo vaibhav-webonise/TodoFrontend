@@ -1,7 +1,9 @@
 import React from 'react';
+import './todo.css';
+import { constants } from './AppConstants'
 
 export const ListTodo = props => {
-  let serialNo = 1;
+  let serialNo = constants.INITIAL_SERIAL_NO;
   return (
     <div>
       <table>
@@ -26,7 +28,7 @@ export const ListTodo = props => {
         </tbody>
       </table>
       <br />
-      <input type='submit' onClick={() => props.onLogOut()} value='Log Out' />
+      <input className="myButton" type='submit' onClick={() => props.onLogOut()} value='Log Out' />
     </div>
   );
 };

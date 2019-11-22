@@ -23,37 +23,32 @@ class Signup extends React.Component {
   signUp = (event) => {
     event.preventDefault();
     const { password, confirmPassword, userName } = this.state;
-    if (password.length > 5) {
-      if (password === confirmPassword) {
-        axios({
-          method: 'post',
-          url: `${constants.URL}/signup`,
-          data: {
-            username: userName.trim(),
-            password: password.trim(),
-          }
-        }).then((response) => {
-          if (response.status === 200) {
-            this.setState({ infoMessage: 'Registration successful', })
-            this.setState({
-              confirmPassword: '',
-              password: '',
-              userName: '',
-            })
-          }
-        }).catch((error) => {
-          if (error.message === constants.NETWORK_ERROR) {
-            this.setState({ infoMessage: error.message })
-          } else if (error.response.status === 409) {
-            this.setState({ infoMessage: 'user already exists' })
-          }
-        })
-      }
-      else {
-        this.setState({ infoMessage: 'Password does not match' })
-      }
+    if (password === confirmPassword) {
+      axios({
+        method: 'post',
+        url: `${constants.URL}/signup`,
+        data: {
+          username: userName.trim(),
+          password: password.trim(),
+        }
+      }).then((response) => {
+        if (response.status === constants.OK) {
+          this.setState({ infoMessage: 'Registration successful', })
+          this.setState({
+            confirmPassword: '',
+            password: '',
+            userName: '',
+          })
+        }
+      }).catch((error) => {
+        if (error.message === constants.NETWORK_ERROR) {
+          this.setState({ infoMessage: error.message })
+        } else if (error.response.status === constants.CONFLICT) {
+          this.setState({ infoMessage: 'user already exists' })
+        }
+      })
     } else {
-      this.setState({ infoMessage: 'Password must have atleast 6 character' })
+      this.setState({ infoMessage: 'Password does not match' })
     }
   }
 
@@ -70,15 +65,15 @@ class Signup extends React.Component {
           <table>
             <tr>
               <td><label for='Username'>Username</label></td>
-              <td><input type='text' name='userName' onChange={this.onUserType} value={userName} placeholder='Username' required /></td>
+              <td><input type='text' name='userName' minLength={constants.USERNAME_MIN_LENGTH} onChange={this.onUserType} value={userName} placeholder='Username' required /></td>
             </tr>
             <tr>
               <td><label for='Password'>Password</label></td>
-              <td><input type='password' name='password' onChange={this.onUserType} value={password} placeholder='Password' required /></td>
+              <td><input type='password' name='password' minLength={constants.PASSWORD_MIN_LENGTH} onChange={this.onUserType} value={password} placeholder='Password' required /></td>
             </tr>
             <tr>
               <td><label for='Re-enter password'>Re-enter password</label></td>
-              <td><input type='password' name='confirmPassword' onChange={this.onUserType} value={confirmPassword} placeholder='Re-enter password' required /></td>
+              <td><input type='password' name='confirmPassword' minLength={constants.PASSWORD_MIN_LENGTH} onChange={this.onUserType} value={confirmPassword} placeholder='Re-enter password' required /></td>
             </tr>
           </table><br />
           <input type='submit' value='Signup' />
